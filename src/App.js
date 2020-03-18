@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{ useState, useEffect} from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import TotalCase from './components/TotalCase';
 
 function App() {
+  const [data, setData] = useState();
+
+  useEffect(() => {
+       fetch("https://covid19.mathdro.id/api")
+        .then(res => res.json()).then( data=>setData(data))
+        .catch(err => {
+        console.log(err)
+        });
+
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    
+    <div className="container">{
+      <TotalCase data={ data } />
+
+    }
+
     </div>
   );
 }
 
 export default App;
+
